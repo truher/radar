@@ -11,7 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
  */
 public class Target {
     static {
-        new MathSetup();
+        MathSetup.setup();
     }
     public enum Type {
         TAG, ALLY, OPPONENT, SELF, DEFAULT

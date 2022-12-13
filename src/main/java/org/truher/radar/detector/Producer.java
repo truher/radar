@@ -22,7 +22,7 @@ import edu.wpi.first.math.geometry.Translation2d;
  */
 public class Producer {
     static {
-        new MathSetup();
+        MathSetup.setup();
     }
 
     private static final int PX_PER_STEP = 10;
