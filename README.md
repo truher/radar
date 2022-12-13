@@ -1,6 +1,7 @@
 # Radar
 
-NT4 app that shows camera telemetry.  Run it as a DS dashboard.
+Demo of Network Tables support for MessagePack: a dashboard for AprilTags.
+You can run it as a DS dashboard.
 
 ## Gradle
 
@@ -68,7 +69,7 @@ Edit the line starting with `DashboardCmdLine` to run the jar; on my
 machine this line looks like this:
 
 ```
-DashboardCmdLine = "java -jar "C:\\Users\\joelt\\FRC\\frc-test\\radar\\build\\libs\\Radar-winx64.jar" map targets"
+DashboardCmdLine = "java -jar "C:\\Users\\joelt\\FRC\\radar\\build\\libs\\Radar-winx64.jar" map targets"
 ```
 
 You'll have to modify this line to point at the actual jar.
