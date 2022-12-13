@@ -1,36 +1,92 @@
 package org.truher.radar;
 
-import edu.wpi.first.networktables.BooleanPublisher;
-import edu.wpi.first.networktables.BooleanTopic;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTablesJNI;
-import edu.wpi.first.util.CombinedRuntimeLoader;
-import edu.wpi.first.util.WPIUtilJNI;
-
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.truher.radar.detector.Producer;
+import org.truher.radar.net.Publisher;
+import org.truher.radar.net.Server;
+import org.truher.radar.net.Subscriber;
+import org.truher.radar.view.Renderer;
 
 public final class Main {
+  public static class Publish {
+    private final Server server;
+    private final Publisher targetPublisher;
+    private final Producer producer;
+
+    public Publish() {
+      server = new Server();
+      targetPublisher = new Publisher();
+      producer = new Producer(targetPublisher);
+      Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown()));
+    }
+
+    public void run() {
+      server.start();
+      targetPublisher.start();
+      producer.start();
+    }
+
+    private void shutdown() {
+      server.close();
+      targetPublisher.close();
+    }
+  }
+
+  public static class Render {
+    private final List<Subscriber> subscribers;
+
+    public Render(String[] args) {
+      subscribers = new ArrayList<Subscriber>();
+      for (int i = 0; i < args.length; ++i) {
+        String topicName = args[i];
+        System.out.printf("subscribing to topic %s\n", topicName);
+        subscribers.add(
+            new Subscriber(topicName, new Renderer(topicName, i)));
+      }
+      Runtime.getRuntime().addShutdownHook(new Thread(() -> shutdown()));
+    }
+
+    public void run() {
+      System.out.println("starting subscribers");
+      for (Subscriber s : subscribers) {
+        s.start();
+      }
+    }
+
+    private void shutdown() {
+      System.out.println("closing subscribers");
+      for (Subscriber s : subscribers) {
+        s.close();
+      }
+    }
+  }
 
   public static void main(String[] args) throws IOException, InterruptedException {
+    System.out.println("""
+        Radar: NT4 example dashboard app.
 
-    WPIUtilJNI.Helper.setExtractOnStaticLoad(false);
-    CombinedRuntimeLoader.loadLibraries(Main.class, "wpiutiljni");
+        Usage: java -jar Radar-winx64.jar             NT server, publish fake data to 'targets' and 'map'
+           or: java -jar Radar-winx64.jar [topic ..]  NT client, one display per topic
+        """);
 
-    NetworkTablesJNI.Helper.setExtractOnStaticLoad(false);
-    // json filename matches build.gradle
-    var files = CombinedRuntimeLoader.extractLibraries(Main.class, "/ResourceInformation-NetworkTables.json"); 
-    CombinedRuntimeLoader.loadLibrary("ntcorejni", files);
-
-    NetworkTableInstance inst =  NetworkTableInstance.getDefault(); 
-    inst.setServer("localhost", NetworkTableInstance.kDefaultPort4);
-    inst.startClient4("radar");
-    inst.startDSClient();
-
-    TargetSubscriber r = new TargetSubscriber();
-    r.run();
-    new TargetPublisher().run();
-
-    Thread.sleep(30000);
+    if (args.length == 0) {
+      System.out.println("running publisher");
+      Publish p = new Publish();
+      p.run();
+      while (true) {
+        Thread.sleep(1000);
+      }
+    } else {
+      System.out.println("running renderers");
+      Render r = new Render(args);
+      r.run();
+      while (true) {
+        Thread.sleep(1000);
+      }
+    }
   }
+
 }
