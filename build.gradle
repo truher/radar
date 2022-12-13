@@ -20,7 +20,8 @@ def nativeTasks = wpilibTools.createExtractionTasks {
 }
 nativeTasks.addToSourceSetResources(sourceSets.main)
 
-wpilibTools.deps.wpilibVersion = "2023.+"
+// wpilibTools.deps.wpilibVersion = "2023.+"
+wpilibTools.deps.wpilibVersion = "2023.1.1-beta-6"
 
 def nativeConfig = configurations.create(nativeConfigName)
 // ntcore uses wpinet and wpiutil.
