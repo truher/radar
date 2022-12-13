@@ -1,2 +1,3 @@
-# radar
-Demo of Network Tables support for MessagePack: a dashboard for AprilTags.
+# Radar
+
+NT4 app that shows camera telemetry.  Run it as a DS dashboard.
