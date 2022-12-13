@@ -8,9 +8,9 @@ The hardest part of the demo was learning enough about Gradle and the WPI Gradle
 to build the app.  I cribbed from Shuffleboard, and I'm still not sure it's right, but
 it does work.
 
-I use the vscode "Gradle for Java" extension.  To run a build, use Tasks>shadow>shadowJar.
+I use the vscode "Gradle for Java" extension.  To run a build, use `Tasks > shadow > shadowJar`.
 This will produce a "fat jar" (i.e. one that incorporates its dependencies, like static
-linking) in $projecthome/build/libs.
+linking) in `$projecthome/build/libs`.
 
 ## Native libraries
 
@@ -32,23 +32,23 @@ basic visualizer that can be run from the Driver Station.
 ## Running the demo
 
 Build the jar ("shadowJar" in vscode) and then find it
-in $projecthome/build/libs.  You'll run it two times, one for the producer and
+in `$projecthome/build/libs.`  You'll run it two times, one for the producer and
 one for the consumer.
 
 First the producer:
 
-'''
+```
 java -jar Radar-winx64.jar
-'''
+```
 
 This will run an NT4 server locally, and also connect a client to it, publishing fake
 telemetry.
 
 Now run the consumer:
 
-'''
+```
 java -jar Radar-winx64.jar map targets
-'''
+```
 
 This should result in two windows, side by side.  The left side shows
 the "north up" view, where the robot moves and the world is fixed.
@@ -60,16 +60,16 @@ center facing up, and the world pivots around it.
 The driver station can execute any command as the "dashboard," specified
 in this file:
 
-'''
+```
 "C:\Users\Public\Documents\FRC\FRC DS Data Storage.ini"
-'''
+```
 
-Edit the line starting with "DashboardCmdLine" to run the jar; on my
+Edit the line starting with `DashboardCmdLine` to run the jar; on my
 machine this line looks like this:
 
-'''
+```
 DashboardCmdLine = "java -jar "C:\\Users\\joelt\\FRC\\frc-test\\radar\\build\\libs\\Radar-winx64.jar" map targets"
-'''
+```
 
 You'll have to modify this line to point at the actual jar.
 Note the double backslashes; a single backslash is a special character.
