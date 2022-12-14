@@ -45,6 +45,7 @@ public class Publisher implements BiConsumer<String, TargetList> {
      */
     public void start() {
         System.out.println("starting publisher");
+        inst.startClient4("Radar Publisher");
         inst.setServer("localhost", NetworkTableInstance.kDefaultPort4);
     }
 
