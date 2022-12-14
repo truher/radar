@@ -1,3 +1,5 @@
+<img src="radar.png" height=350 align="right" alt="top view of a robot and some obstacles"/>
+
 # Radar
 
 Demo of Network Tables support for MessagePack: a dashboard for AprilTags.
